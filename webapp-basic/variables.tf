@@ -24,6 +24,12 @@ variable "app_settings_slot" {
   type = "map"
 }
 
+variable "app_tls_version" {
+}
+
+variable "app_insights_name" {
+  default="automationManagerAppInsightsInstrumentationKey"
+}
 
 variable "connection_01" {
   default = {

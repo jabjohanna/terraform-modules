@@ -24,6 +24,7 @@ resource "azurerm_app_service" "app" {
   app_service_plan_id = "${azurerm_app_service_plan.sp.id}"
 
   site_config {
+    min_tls_version = "${var.app_tls_version}"
     dotnet_framework_version = "v4.0"
     scm_type = "LocalGit"
     always_on = true
@@ -31,7 +32,7 @@ resource "azurerm_app_service" "app" {
 
   app_settings = "${merge(
     map("APPINSIGHTS_INSTRUMENTATIONKEY",local.app_instrumentation_key),
-    map("automationManagerAppInsightsInstrumentationKey",local.app_instrumentation_key),
+    map(var.app_insights_name ,local.app_instrumentation_key),
     var.app_settings)}"
 
   connection_string {
@@ -82,13 +83,14 @@ resource "azurerm_app_service_slot" "app_slot" {
   app_service_plan_id = "${azurerm_app_service_plan.sp.id}"
 
   site_config {
+    min_tls_version = "${var.app_tls_version}"
     scm_type = "LocalGit"
     always_on = true
   }
 
   app_settings = "${merge(
     map("APPINSIGHTS_INSTRUMENTATIONKEY",local.app_instrumentation_key),
-    map("automationManagerAppInsightsInstrumentationKey",local.app_instrumentation_key),
+    map(var.app_insights_name, local.app_instrumentation_key),
     var.app_settings_slot)}"
 
   connection_string {
